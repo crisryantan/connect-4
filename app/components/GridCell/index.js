@@ -27,7 +27,6 @@ const Cell = styled.div`
 class GridCell extends React.PureComponent {
   handleClick() {
     const { sendTileDrop, col } = this.props;
-    console.log(`Clicked on column ${this.props.col}`);
     sendTileDrop(col);
   }
 
