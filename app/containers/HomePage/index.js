@@ -26,8 +26,33 @@ const Wrapper = styled.div`
 
 /* eslint-disable react/prefer-stateless-function */
 export class HomePage extends React.PureComponent {
+  winVertical(grid) {
+    const hasWon = grid.reduce((accu, column) => {
+      const pattern = column.reduce((accu2, cell, index) => {
+        if (!accu.length) {
+          accu2.push(cell);
+          return accu2;
+        }
+        // if last index of "pattern" does not match cell, reset "pattern" to empty array
+        if (accu2[index - 1] !== cell) {
+          return [];
+        }
+
+        accu2.push(cell);
+        return accu2;
+      }, []);
+      if (accu || pattern.length === 4) {
+        return true;
+      }
+      return false;
+    }, false);
+    return hasWon;
+  }
+
   render() {
     const { sendTileDrop, board } = this.props;
+    const win = this.winVertical(board);
+    console.log(win);
 
     const cells = [];
 
