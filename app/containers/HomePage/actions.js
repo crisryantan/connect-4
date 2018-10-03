@@ -4,10 +4,11 @@
  *
  */
 
-import { DEFAULT_ACTION } from './constants';
+import { DROP_TILE } from './constants';
 
-export function defaultAction() {
+export function dropTile(col) {
   return {
-    type: DEFAULT_ACTION,
+    type: DROP_TILE,
+    col,
   };
 }

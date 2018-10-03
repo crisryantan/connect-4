@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -16,6 +16,7 @@ import injectReducer from 'utils/injectReducer';
 import GridCell from 'components/GridCell';
 
 import makeSelectHomePage from './selectors';
+import { dropTile } from './actions';
 import reducer from './reducer';
 
 const Wrapper = styled.div`
@@ -26,6 +27,7 @@ const Wrapper = styled.div`
 /* eslint-disable react/prefer-stateless-function */
 export class HomePage extends React.PureComponent {
   render() {
+    const { sendTileDrop } = this.props;
     const cells = [];
 
     // Enclose all of each line into a container
@@ -33,7 +35,12 @@ export class HomePage extends React.PureComponent {
       const currentLine = [];
       for (let col = 0; col < 7; col += 1) {
         currentLine.push(
-          <GridCell key={`${col}-${row}`} col={col} row={row} />,
+          <GridCell
+            sendTileDrop={sendTileDrop}
+            key={`${col}-${row}`}
+            col={col}
+            row={row}
+          />,
         );
       }
 
@@ -49,7 +56,7 @@ export class HomePage extends React.PureComponent {
 }
 
 HomePage.propTypes = {
-  // dispatch: PropTypes.func.isRequired,
+  sendTileDrop: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -58,7 +65,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    sendTileDrop: col => dispatch(dropTile(col)),
   };
 }
 

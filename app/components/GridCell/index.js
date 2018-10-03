@@ -19,7 +19,9 @@ const Cell = styled.div`
 /* eslint-disable react/prefer-stateless-function */
 class GridCell extends React.PureComponent {
   handleClick() {
+    const { sendTileDrop, col } = this.props;
     console.log(`Clicked on column ${this.props.col}`);
+    sendTileDrop(col);
   }
 
   render() {
@@ -36,6 +38,7 @@ class GridCell extends React.PureComponent {
 GridCell.propTypes = {
   col: PropTypes.number,
   row: PropTypes.number,
+  sendTileDrop: PropTypes.func,
 };
 
 export default GridCell;
