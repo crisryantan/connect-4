@@ -15,7 +15,7 @@ import injectReducer from 'utils/injectReducer';
 
 import GridCell from 'components/GridCell';
 
-import makeSelectHomePage from './selectors';
+import { makeSelectCurrent, makeSelectBoard } from './selectors';
 import { dropTile } from './actions';
 import reducer from './reducer';
 
@@ -27,7 +27,8 @@ const Wrapper = styled.div`
 /* eslint-disable react/prefer-stateless-function */
 export class HomePage extends React.PureComponent {
   render() {
-    const { sendTileDrop } = this.props;
+    const { sendTileDrop, board } = this.props;
+
     const cells = [];
 
     // Enclose all of each line into a container
@@ -37,6 +38,7 @@ export class HomePage extends React.PureComponent {
         currentLine.push(
           <GridCell
             sendTileDrop={sendTileDrop}
+            board={board}
             key={`${col}-${row}`}
             col={col}
             row={row}
@@ -57,10 +59,12 @@ export class HomePage extends React.PureComponent {
 
 HomePage.propTypes = {
   sendTileDrop: PropTypes.func.isRequired,
+  board: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  homepage: makeSelectHomePage(),
+  current: makeSelectCurrent(),
+  board: makeSelectBoard(),
 });
 
 function mapDispatchToProps(dispatch) {

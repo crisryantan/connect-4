@@ -21,8 +21,19 @@ export const initialState = {
 
 function homePageReducer(state = initialState, action) {
   switch (action.type) {
-    case DROP_TILE:
-      return state;
+    case DROP_TILE: {
+      const { col: currentCol } = action;
+      const tile = state.current;
+      const col = state.board[currentCol].concat(tile);
+
+      const board = state.board.slice();
+      board[currentCol] = col;
+      return {
+        current: state.current === 'green' ? 'yellow' : 'green',
+        board,
+      };
+    }
+
     default:
       return state;
   }

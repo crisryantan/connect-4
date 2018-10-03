@@ -12,8 +12,8 @@ const Cell = styled.div`
   border: 1px solid black;
   display: inline-block;
   padding: 20px;
-  font-family: monospace;
   cursor: pointer;
+  background-color: ${props => props.cellColor};
 `;
 
 /* eslint-disable react/prefer-stateless-function */
@@ -24,11 +24,23 @@ class GridCell extends React.PureComponent {
     sendTileDrop(col);
   }
 
+  getCellColor(cellColor) {
+    if (cellColor === 'green') {
+      return 'green';
+    } else if (cellColor === 'yellow') {
+      return 'yellow';
+    }
+    return '';
+  }
+
   render() {
+    const { board, col, row } = this.props;
+    const cellColor = this.getCellColor(board[col][row]);
+
     return (
-      <Cell onClick={() => this.handleClick()}>
+      <Cell onClick={() => this.handleClick()} cellColor={cellColor}>
         <p>
-          {this.props.col}, {this.props.row}
+          {col}, {row}
         </p>
       </Cell>
     );
@@ -39,6 +51,7 @@ GridCell.propTypes = {
   col: PropTypes.number,
   row: PropTypes.number,
   sendTileDrop: PropTypes.func,
+  board: PropTypes.array,
 };
 
 export default GridCell;

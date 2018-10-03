@@ -17,5 +17,11 @@ const selectHomePageDomain = state => state.homePage;
 const makeSelectHomePage = () =>
   createSelector(selectHomePageDomain, substate => substate);
 
+const makeSelectCurrent = () =>
+  createSelector(selectHomePageDomain, substate => substate.current);
+
+const makeSelectBoard = () =>
+  createSelector(selectHomePageDomain, substate => substate.board);
+
 export default makeSelectHomePage;
-export { selectHomePageDomain };
+export { selectHomePageDomain, makeSelectCurrent, makeSelectBoard };
