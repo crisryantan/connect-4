@@ -17,6 +17,9 @@ const selectHomePageDomain = state => state.homePage;
 const makeSelectHomePage = () =>
   createSelector(selectHomePageDomain, substate => substate);
 
+const makeSelectGameOption = () =>
+  createSelector(selectHomePageDomain, substate => substate.gameOption);
+
 const makeSelectCurrent = () =>
   createSelector(selectHomePageDomain, substate => substate.current);
 
@@ -29,6 +32,7 @@ const makeSelectIsGameOver = () =>
 export default makeSelectHomePage;
 export {
   selectHomePageDomain,
+  makeSelectGameOption,
   makeSelectCurrent,
   makeSelectBoard,
   makeSelectIsGameOver,

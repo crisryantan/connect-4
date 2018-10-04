@@ -32,8 +32,8 @@ const Cell = styled.button`
 /* eslint-disable react/prefer-stateless-function */
 class GridCell extends React.PureComponent {
   handleClick() {
-    const { sendTileDrop, col } = this.props;
-    sendTileDrop(col);
+    const { sendTileDrop, col, gameOption } = this.props;
+    sendTileDrop(col, gameOption);
   }
 
   getCellColor(cellColor) {
@@ -65,6 +65,7 @@ GridCell.propTypes = {
   sendTileDrop: PropTypes.func,
   board: PropTypes.array,
   isGameOver: PropTypes.bool,
+  gameOption: PropTypes.string,
 };
 
 export default GridCell;

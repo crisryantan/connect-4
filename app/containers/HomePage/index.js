@@ -9,61 +9,34 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import styled from 'styled-components';
 
+import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
 import GridCell from 'components/GridCell';
 import { settings } from 'utils/helpers';
 
+import saga from './saga';
+import { startGame, dropTile, resetGame } from './actions';
+import reducer from './reducer';
 import {
+  Wrapper,
+  ProjectTitle,
+  FooterWrapper,
+  CurrentColor,
+  Button,
+} from './css';
+import {
+  makeSelectGameOption,
   makeSelectCurrent,
   makeSelectBoard,
   makeSelectIsGameOver,
 } from './selectors';
-import { dropTile, resetGame } from './actions';
-import reducer from './reducer';
-
-const Wrapper = styled.div`
-  margin-top: 20px;
-  text-align: center;
-`;
-
-const FooterWrapper = styled.div`
-  text-align: center;
-`;
-
-const CurrentColor = styled.div`
-  border-radius: 50%;
-  cursor: pointer;
-  display: inline-block;
-  height: 40px;
-  margin: 10px;
-  width: 40px;
-  background-color: ${props =>
-    props.cellColor ? `${props.cellColor} !important` : '#eeeeee'};
-`;
-
-const RestartBtn = styled.button`
-  border: 1px solid;
-  cursor: pointer;
-  border-radius: 2px;
-
-  :focus {
-    outline: 0;
-  }
-`;
 
 /* eslint-disable react/prefer-stateless-function */
 export class HomePage extends React.PureComponent {
-  render() {
-    const {
-      sendTileDrop,
-      board,
-      currentPlayer,
-      isGameOver,
-      restart,
-    } = this.props;
+  renderBoard = () => {
+    const { sendTileDrop, board, isGameOver, gameOption } = this.props;
     const cells = [];
 
     for (let row = settings.numRows - 1; row >= 0; row -= 1) {
@@ -74,6 +47,7 @@ export class HomePage extends React.PureComponent {
             isGameOver={isGameOver}
             sendTileDrop={sendTileDrop}
             board={board}
+            gameOption={gameOption}
             key={`${col}-${row}`}
             col={col}
             row={row}
@@ -81,23 +55,41 @@ export class HomePage extends React.PureComponent {
         );
       }
 
-      cells.push(
-        <div key={row} className="row">
-          {currentRow}
-        </div>,
+      cells.push(<div key={row}>{currentRow}</div>);
+    }
+    return cells;
+  };
+
+  render() {
+    const {
+      gameOption,
+      currentPlayer,
+      isGameOver,
+      start,
+      restart,
+    } = this.props;
+    const connect4Board = this.renderBoard();
+
+    if (!gameOption) {
+      return (
+        <Wrapper>
+          <ProjectTitle>Connect - 4 : Choose Option</ProjectTitle>
+          <Button onClick={() => start('two')}>Two players</Button>
+          <Button onClick={() => start('ai')}>AI</Button>
+        </Wrapper>
       );
     }
 
     return (
       <div>
-        <Wrapper>{cells}</Wrapper>
+        <Wrapper>{connect4Board}</Wrapper>
         <hr />
         <FooterWrapper>
           <div>
             <div>{isGameOver ? 'Winner' : 'Current turn'}: </div>
             <CurrentColor cellColor={currentPlayer} />
           </div>
-          <RestartBtn onClick={restart}>Restart</RestartBtn>
+          <Button onClick={restart}>Restart</Button>
         </FooterWrapper>
       </div>
     );
@@ -105,7 +97,9 @@ export class HomePage extends React.PureComponent {
 }
 
 HomePage.propTypes = {
+  gameOption: PropTypes.string.isRequired,
   sendTileDrop: PropTypes.func.isRequired,
+  start: PropTypes.func.isRequired,
   restart: PropTypes.func.isRequired,
   board: PropTypes.array.isRequired,
   currentPlayer: PropTypes.string.isRequired,
@@ -113,6 +107,7 @@ HomePage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
+  gameOption: makeSelectGameOption(),
   currentPlayer: makeSelectCurrent(),
   board: makeSelectBoard(),
   isGameOver: makeSelectIsGameOver(),
@@ -120,7 +115,8 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    sendTileDrop: col => dispatch(dropTile(col)),
+    start: option => dispatch(startGame(option)),
+    sendTileDrop: (col, gameOption) => dispatch(dropTile(col, gameOption)),
     restart: () => dispatch(resetGame()),
   };
 }
@@ -131,8 +127,10 @@ const withConnect = connect(
 );
 
 const withReducer = injectReducer({ key: 'homePage', reducer });
+const withSaga = injectSaga({ key: 'homePage', saga });
 
 export default compose(
   withReducer,
+  withSaga,
   withConnect,
 )(HomePage);
