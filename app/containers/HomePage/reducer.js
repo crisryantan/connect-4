@@ -3,20 +3,18 @@
  * HomePage reducer
  *
  */
-import { checkWin } from 'utils/helpers';
+import { checkWin, settings } from 'utils/helpers';
 import { DROP_TILE, RESET_GAME } from './constants';
+
+const dynamicBoard = [
+  ...Array(settings.numCols)
+    .fill(0)
+    .map(() => []),
+];
 
 export const initialState = {
   current: 'green',
-  board: [
-    [], // col 0
-    [], // col 1
-    [], // col 2
-    [], // col 3
-    [], // col 4
-    [], // col 5
-    [], // col 6
-  ],
+  board: dynamicBoard,
   isGameOver: false,
 };
 
