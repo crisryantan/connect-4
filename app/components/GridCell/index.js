@@ -7,6 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { settings } from 'utils/helpers';
 
 const Cell = styled.button`
   border-radius: 50%;
@@ -20,6 +21,7 @@ const Cell = styled.button`
 
   :hover {
     background-color: #dddddd;
+    cursor: ${props => props.columnMaxed && `not-allowed`};
   }
 
   :focus {
@@ -46,11 +48,13 @@ class GridCell extends React.PureComponent {
   render() {
     const { board, col, row, isGameOver } = this.props;
     const cellColor = this.getCellColor(board[col][row]);
+    const columnMaxed = board[col].length === settings.numRows;
     return (
       <Cell
-        disabled={isGameOver}
+        disabled={isGameOver || columnMaxed}
         onClick={() => this.handleClick()}
         cellColor={cellColor}
+        columnMaxed={columnMaxed}
       />
     );
   }

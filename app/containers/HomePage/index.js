@@ -14,9 +14,13 @@ import styled from 'styled-components';
 import injectReducer from 'utils/injectReducer';
 
 import GridCell from 'components/GridCell';
-import { checkWin, settings } from 'utils/helpers';
+import { settings } from 'utils/helpers';
 
-import { makeSelectCurrent, makeSelectBoard } from './selectors';
+import {
+  makeSelectCurrent,
+  makeSelectBoard,
+  makeSelectIsGameOver,
+} from './selectors';
 import { dropTile } from './actions';
 import reducer from './reducer';
 
@@ -28,8 +32,7 @@ const Wrapper = styled.div`
 /* eslint-disable react/prefer-stateless-function */
 export class HomePage extends React.PureComponent {
   render() {
-    const { sendTileDrop, board, currentPlayer } = this.props;
-    const isGameOver = checkWin(board);
+    const { sendTileDrop, board, currentPlayer, isGameOver } = this.props;
     const cells = [];
 
     for (let row = settings.numRows - 1; row >= 0; row -= 1) {
@@ -58,8 +61,9 @@ export class HomePage extends React.PureComponent {
       <Wrapper>
         {cells}
         <hr />
-        <p>current turn: {currentPlayer} </p>
-        {isGameOver && <p>Winner: {currentPlayer}</p>}
+        <p>
+          {isGameOver ? 'Winner' : 'Current turn'}: {currentPlayer}
+        </p>
       </Wrapper>
     );
   }
@@ -69,11 +73,13 @@ HomePage.propTypes = {
   sendTileDrop: PropTypes.func.isRequired,
   board: PropTypes.array.isRequired,
   currentPlayer: PropTypes.string.isRequired,
+  isGameOver: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentPlayer: makeSelectCurrent(),
   board: makeSelectBoard(),
+  isGameOver: makeSelectIsGameOver(),
 });
 
 function mapDispatchToProps(dispatch) {
