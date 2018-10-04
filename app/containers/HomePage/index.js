@@ -21,7 +21,7 @@ import {
   makeSelectBoard,
   makeSelectIsGameOver,
 } from './selectors';
-import { dropTile } from './actions';
+import { dropTile, resetGame } from './actions';
 import reducer from './reducer';
 
 const Wrapper = styled.div`
@@ -29,10 +29,41 @@ const Wrapper = styled.div`
   text-align: center;
 `;
 
+const FooterWrapper = styled.div`
+  text-align: center;
+`;
+
+const CurrentColor = styled.div`
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-block;
+  height: 40px;
+  margin: 10px;
+  width: 40px;
+  background-color: ${props =>
+    props.cellColor ? `${props.cellColor} !important` : '#eeeeee'};
+`;
+
+const RestartBtn = styled.button`
+  border: 1px solid;
+  cursor: pointer;
+  border-radius: 2px;
+
+  :focus {
+    outline: 0;
+  }
+`;
+
 /* eslint-disable react/prefer-stateless-function */
 export class HomePage extends React.PureComponent {
   render() {
-    const { sendTileDrop, board, currentPlayer, isGameOver } = this.props;
+    const {
+      sendTileDrop,
+      board,
+      currentPlayer,
+      isGameOver,
+      restart,
+    } = this.props;
     const cells = [];
 
     for (let row = settings.numRows - 1; row >= 0; row -= 1) {
@@ -58,19 +89,24 @@ export class HomePage extends React.PureComponent {
     }
 
     return (
-      <Wrapper>
-        {cells}
+      <div>
+        <Wrapper>{cells}</Wrapper>
         <hr />
-        <p>
-          {isGameOver ? 'Winner' : 'Current turn'}: {currentPlayer}
-        </p>
-      </Wrapper>
+        <FooterWrapper>
+          <div>
+            <div>{isGameOver ? 'Winner' : 'Current turn'}: </div>
+            <CurrentColor cellColor={currentPlayer} />
+          </div>
+          <RestartBtn onClick={restart}>Restart</RestartBtn>
+        </FooterWrapper>
+      </div>
     );
   }
 }
 
 HomePage.propTypes = {
   sendTileDrop: PropTypes.func.isRequired,
+  restart: PropTypes.func.isRequired,
   board: PropTypes.array.isRequired,
   currentPlayer: PropTypes.string.isRequired,
   isGameOver: PropTypes.bool.isRequired,
@@ -85,6 +121,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     sendTileDrop: col => dispatch(dropTile(col)),
+    restart: () => dispatch(resetGame()),
   };
 }
 

@@ -21,7 +21,7 @@ const Cell = styled.button`
 
   :hover {
     background-color: #dddddd;
-    cursor: ${props => props.columnMaxed && `not-allowed`};
+    cursor: ${props => props.disabled && `not-allowed`};
   }
 
   :focus {
@@ -54,7 +54,6 @@ class GridCell extends React.PureComponent {
         disabled={isGameOver || columnMaxed}
         onClick={() => this.handleClick()}
         cellColor={cellColor}
-        columnMaxed={columnMaxed}
       />
     );
   }

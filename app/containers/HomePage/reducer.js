@@ -4,7 +4,7 @@
  *
  */
 import { checkWin } from 'utils/helpers';
-import { DROP_TILE } from './constants';
+import { DROP_TILE, RESET_GAME } from './constants';
 
 export const initialState = {
   current: 'green',
@@ -42,6 +42,9 @@ function homePageReducer(state = initialState, action) {
         isGameOver,
       };
     }
+
+    case RESET_GAME:
+      return initialState;
 
     default:
       return state;
