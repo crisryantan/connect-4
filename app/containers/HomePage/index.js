@@ -82,8 +82,7 @@ export class HomePage extends React.PureComponent {
 
     return (
       <div>
-        <Wrapper>{connect4Board}</Wrapper>
-        <hr />
+        {!isGameOver && <Wrapper>{connect4Board}</Wrapper>}
         <FooterWrapper>
           <div>
             <div>{isGameOver ? 'Winner' : 'Current turn'}: </div>

@@ -21,7 +21,7 @@ const Cell = styled.button`
 
   :hover {
     background-color: #dddddd;
-    cursor: ${props => props.disabled && `not-allowed`};
+    cursor: ${props => props.disabled || (props.columnMaxed && `not-allowed`)};
   }
 
   :focus {
@@ -31,8 +31,12 @@ const Cell = styled.button`
 
 /* eslint-disable react/prefer-stateless-function */
 class GridCell extends React.PureComponent {
-  handleClick() {
+  handleClick(columnMaxed) {
     const { sendTileDrop, col, gameOption } = this.props;
+    if (columnMaxed) {
+      alert('Column has been maxed out');
+      return;
+    }
     sendTileDrop(col, gameOption);
   }
 
@@ -51,8 +55,9 @@ class GridCell extends React.PureComponent {
     const columnMaxed = board[col].length === settings.numRows;
     return (
       <Cell
-        disabled={isGameOver || columnMaxed}
-        onClick={() => this.handleClick()}
+        disabled={isGameOver}
+        columnMaxed={columnMaxed}
+        onClick={() => this.handleClick(columnMaxed)}
         cellColor={cellColor}
       />
     );

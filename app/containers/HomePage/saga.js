@@ -23,10 +23,10 @@ export function* dropTileSaga({ currentCol, gameOption }) {
     const isGameOver = checkWin(updatedBoard);
     if (isGameOver) {
       yield put(dropTileSuccess(updatedBoard, isGameOver, tile));
-    } else {
-      const current = tile === 'green' ? 'yellow' : 'green';
-      yield put(dropTileSuccess(updatedBoard, isGameOver, current));
+      return;
     }
+    const current = tile === 'green' ? 'yellow' : 'green';
+    yield put(dropTileSuccess(updatedBoard, isGameOver, current));
 
     if (gameOption === 'ai') {
       const dropAITile = getAITile(updatedBoard);
