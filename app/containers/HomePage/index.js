@@ -14,7 +14,7 @@ import styled from 'styled-components';
 import injectReducer from 'utils/injectReducer';
 
 import GridCell from 'components/GridCell';
-import { winVertical, winHorizontal } from 'utils/helpers';
+import { checkWin, settings } from 'utils/helpers';
 
 import { makeSelectCurrent, makeSelectBoard } from './selectors';
 import { dropTile } from './actions';
@@ -28,18 +28,16 @@ const Wrapper = styled.div`
 /* eslint-disable react/prefer-stateless-function */
 export class HomePage extends React.PureComponent {
   render() {
-    const { sendTileDrop, board } = this.props;
-    const win = winVertical(board) || winHorizontal(board);
-    console.log(win);
-
+    const { sendTileDrop, board, currentPlayer } = this.props;
+    const isGameOver = checkWin(board);
     const cells = [];
 
-    // Enclose all of each line into a container
-    for (let row = 5; row >= 0; row -= 1) {
-      const currentLine = [];
-      for (let col = 0; col < 7; col += 1) {
-        currentLine.push(
+    for (let row = settings.numRows - 1; row >= 0; row -= 1) {
+      const currentRow = [];
+      for (let col = 0; col < settings.numCols; col += 1) {
+        currentRow.push(
           <GridCell
+            isGameOver={isGameOver}
             sendTileDrop={sendTileDrop}
             board={board}
             key={`${col}-${row}`}
@@ -51,22 +49,30 @@ export class HomePage extends React.PureComponent {
 
       cells.push(
         <div key={row} className="row">
-          {currentLine}
+          {currentRow}
         </div>,
       );
     }
 
-    return <Wrapper>{cells}</Wrapper>;
+    return (
+      <Wrapper>
+        {cells}
+        <hr />
+        <p>current turn: {currentPlayer} </p>
+        {isGameOver && <p>Winner: {currentPlayer}</p>}
+      </Wrapper>
+    );
   }
 }
 
 HomePage.propTypes = {
   sendTileDrop: PropTypes.func.isRequired,
   board: PropTypes.array.isRequired,
+  currentPlayer: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  current: makeSelectCurrent(),
+  currentPlayer: makeSelectCurrent(),
   board: makeSelectBoard(),
 });
 

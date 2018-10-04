@@ -8,7 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const Cell = styled.div`
+const Cell = styled.button`
   border-radius: 50%;
   cursor: pointer;
   display: inline-block;
@@ -20,6 +20,10 @@ const Cell = styled.div`
 
   :hover {
     background-color: #dddddd;
+  }
+
+  :focus {
+    outline: 0;
   }
 `;
 
@@ -40,10 +44,15 @@ class GridCell extends React.PureComponent {
   }
 
   render() {
-    const { board, col, row } = this.props;
+    const { board, col, row, isGameOver } = this.props;
     const cellColor = this.getCellColor(board[col][row]);
-
-    return <Cell onClick={() => this.handleClick()} cellColor={cellColor} />;
+    return (
+      <Cell
+        disabled={isGameOver}
+        onClick={() => this.handleClick()}
+        cellColor={cellColor}
+      />
+    );
   }
 }
 
@@ -52,6 +61,7 @@ GridCell.propTypes = {
   row: PropTypes.number,
   sendTileDrop: PropTypes.func,
   board: PropTypes.array,
+  isGameOver: PropTypes.bool,
 };
 
 export default GridCell;
