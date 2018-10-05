@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { settings } from 'utils/helpers';
 
-const Cell = styled.button`
+export const Cell = styled.button`
   border-radius: 50%;
   cursor: pointer;
   display: inline-block;
@@ -31,7 +31,7 @@ const Cell = styled.button`
 
 /* eslint-disable react/prefer-stateless-function */
 class GridCell extends React.PureComponent {
-  handleClick(columnMaxed) {
+  tileDrop(columnMaxed) {
     const { sendTileDrop, col, gameOption } = this.props;
     if (columnMaxed) {
       alert('Column has been maxed out');
@@ -57,7 +57,7 @@ class GridCell extends React.PureComponent {
       <Cell
         disabled={isGameOver}
         columnMaxed={columnMaxed}
-        onClick={() => this.handleClick(columnMaxed)}
+        onClick={() => this.tileDrop(columnMaxed)}
         cellColor={cellColor}
       />
     );

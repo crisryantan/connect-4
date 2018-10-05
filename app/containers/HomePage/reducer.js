@@ -3,14 +3,8 @@
  * HomePage reducer
  *
  */
-import { settings } from 'utils/helpers';
+import { dynamicBoard } from 'utils/helpers';
 import { START_GAME, DROP_TILE_SUCCESS, RESET_GAME } from './constants';
-
-const dynamicBoard = [
-  ...Array(settings.numCols)
-    .fill(0)
-    .map(() => []),
-];
 
 export const initialState = {
   current: 'green',

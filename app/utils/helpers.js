@@ -4,6 +4,12 @@ export const settings = {
   numRows: 6,
 };
 
+export const dynamicBoard = [
+  ...Array(settings.numCols)
+    .fill(0)
+    .map(() => []),
+];
+
 export const checkWin = board =>
   winVertical(board) || winHorizontal(board) || winDiagonal(board);
 

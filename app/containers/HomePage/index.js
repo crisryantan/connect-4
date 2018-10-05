@@ -74,8 +74,12 @@ export class HomePage extends React.PureComponent {
       return (
         <Wrapper>
           <ProjectTitle>Connect - 4 : Choose Option</ProjectTitle>
-          <Button onClick={() => start('two')}>Two players</Button>
-          <Button onClick={() => start('ai')}>AI</Button>
+          <Button className="two" onClick={() => start('two')}>
+            Two players
+          </Button>
+          <Button className="ai" onClick={() => start('ai')}>
+            AI
+          </Button>
         </Wrapper>
       );
     }
