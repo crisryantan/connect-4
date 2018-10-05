@@ -12,6 +12,8 @@ import {
 } from './constants';
 
 export function startGame(option) {
+  // can add difficulty parameter level here, so saga can choose between functions
+  // on AI logic.
   return {
     type: START_GAME,
     option,
