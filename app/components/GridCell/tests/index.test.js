@@ -45,12 +45,11 @@ describe('<GridCell />', () => {
       expect(sendTileDrop).toBeCalled();
     });
 
-    // this test fails. i'll get back to this..
-    // it('should successfully call alert', () => {
-    // subject = buildSubject();
-    //   subject.instance().tileDrop(true);
-    //   expect(sendTileDrop).toBeCalled();
-    // });
+    it('should successfully call alert', () => {
+      subject = buildSubject();
+      subject.instance().tileDrop(true);
+      expect(sendTileDrop).not.toBeCalled();
+    });
   });
 
   describe('getCellColor', () => {

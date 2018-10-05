@@ -19,6 +19,9 @@ import 'sanitize.css/sanitize.css';
 // Import root app
 import App from 'containers/App';
 
+// import antd style
+import 'antd/dist/antd.css';
+
 // Load the favicon and the .htaccess file
 /* eslint-disable import/no-unresolved, import/extensions */
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';

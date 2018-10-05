@@ -7,6 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { message } from 'antd';
 import { settings } from 'utils/helpers';
 
 export const Cell = styled.button`
@@ -34,7 +35,7 @@ class GridCell extends React.PureComponent {
   tileDrop(columnMaxed) {
     const { sendTileDrop, col, gameOption } = this.props;
     if (columnMaxed) {
-      alert('Column has been maxed out');
+      message.error('Column has been maxed out');
       return;
     }
     sendTileDrop(col, gameOption);
